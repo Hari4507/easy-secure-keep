@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { authService } from "@/services/authService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,61 +16,41 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
+    const user = authService.checkAuth();
     if (user) {
       navigate("/dashboard");
     }
   }, [navigate]);
 
-  const handleEmailAuth = (e: React.FormEvent) => {
+  const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-
-    if (isSignUp) {
-      // Check if user already exists
-      if (users.some((user: any) => user.email === email)) {
+    
+    try {
+      if (isSignUp) {
+        await authService.signup(email, password);
         toast({
-          variant: "destructive",
-          title: "Email already registered",
-          description: "Please login instead",
+          title: "Sign up successful",
+          description: "Welcome to your password manager!",
         });
-        return;
-      }
-
-      // Add new user
-      const newUser = { email, password };
-      users.push(newUser);
-      localStorage.setItem("users", JSON.stringify(users));
-      localStorage.setItem("user", JSON.stringify(newUser));
-      toast({
-        title: "Sign up successful",
-        description: "Welcome to your password manager!",
-      });
-      navigate("/dashboard");
-    } else {
-      // Login
-      const user = users.find(
-        (u: any) => u.email === email && u.password === password
-      );
-      if (user) {
-        localStorage.setItem("user", JSON.stringify(user));
+      } else {
+        await authService.login(email, password);
         toast({
           title: "Login successful",
           description: "Welcome back!",
         });
-        navigate("/dashboard");
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Login failed",
-          description: "Invalid email or password",
-        });
       }
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: isSignUp ? "Sign up failed" : "Login failed",
+        description: error.message,
+      });
     }
   };
 
   const handleGoogleSuccess = (credentialResponse: any) => {
-    localStorage.setItem("user", JSON.stringify(credentialResponse));
+    authService.googleLogin(credentialResponse);
     toast({
       title: "Login successful",
       description: "Welcome to your password manager!",
