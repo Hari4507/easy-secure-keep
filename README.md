@@ -1,6 +1,7 @@
-# Welcome to your Lovable project
+# Guardian Vault
 
 ## Project info
+This is a small hackaton project that aims that building a localisesd password mamanger that stores your credentiasl locally instead of storing it to the cloud that can make it vunerable..
 
 **URL**: https://lovable.dev/projects/c897d063-0390-4300-a16c-20926b5e8e38
 
@@ -8,11 +9,9 @@
 
 There are several ways of editing your application.
 
-**Use Lovable**
 
 Simply visit the [Lovable Project](https://lovable.dev/projects/c897d063-0390-4300-a16c-20926b5e8e38) and start prompting.
 
-Changes made via Lovable will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
