@@ -10,7 +10,6 @@ This is a small hackaton project that aims that building a localisesd password m
 There are several ways of editing your application.
 
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c897d063-0390-4300-a16c-20926b5e8e38) and start prompting.
 
 
 **Use your preferred IDE**
